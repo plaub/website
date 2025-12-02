@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PaceRechnerApp from '../components/pace-rechner/PaceRechnerApp.vue';
 ---
 
-<Layout title="Triathlon Pace Rechner - Pierre Laub">
-	<h1>Triathlon Pace Rechner</h1>
-	<p>Hier entsteht der Pace Rechner.</p>
+<Layout title="Triathlon Pace Rechner - Pierre Laub" wide={true}>
+	<PaceRechnerApp client:load />
 </Layout>
