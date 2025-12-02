@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Kontakt - Pierre Laub">
+	<div class="content-wrapper">
+		<h1>Kontakt</h1>
+		
+		<p class="intro">
+			Ich freue mich über Austausch rund um Ausdauersport, Skateboarding, Softwareentwicklung oder kreative Projekte. Wenn du Fragen hast, ein gemeinsames Projekt starten möchtest oder einfach nur connecten willst – schreib mir gerne!
+		</p>
+
+		<div class="contact-links">
+			<a href="mailto:hi@pierrelaub.de" class="contact-item">
+				<span class="icon">📩</span>
+				<span class="label">E-Mail</span>
+				<span class="value">hi@pierrelaub.de</span>
+			</a>
+			<a href="https://www.instagram.com/pierre_laub/" target="_blank" rel="noopener noreferrer" class="contact-item">
+				<span class="icon">📸</span>
+				<span class="label">Instagram</span>
+				<span class="value">@pierre_laub</span>
+			</a>
+			<a href="https://www.tiktok.com/@piyeah_sports" target="_blank" rel="noopener noreferrer" class="contact-item">
+				<span class="icon">📸</span>
+				<span class="label">TikTok</span>
+				<span class="value">@piyeah_sports</span>
+			</a>
+			<a href="https://www.linkedin.com/in/pierre-laub-919243150/" target="_blank" rel="noopener noreferrer" class="contact-item">
+				<span class="icon">💼</span>
+				<span class="label">LinkedIn</span>
+				<span class="value">Pierre Laub</span>
+			</a>
+			<a href="https://github.com/plaub" target="_blank" rel="noopener noreferrer" class="contact-item">
+				<span class="icon">🐙</span>
+				<span class="label">GitHub</span>
+				<span class="value">plaub</span>
+			</a>
+		</div>
+
+		<blockquote class="quote">
+			„Ob Code, Kamera oder Kilometer – am Ende geht’s immer um Leidenschaft und Flow.“
+		</blockquote>
+	</div>
+</Layout>
+
+<style>
+	.content-wrapper {
+		max-width: 700px;
+		margin: 0 auto;
+	}
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 800;
+		margin-bottom: 2rem;
+		background: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.intro {
+		font-size: 1.2rem;
+		line-height: 1.6;
+		color: var(--text-body);
+		margin-bottom: 3rem;
+	}
+	
+	.contact-links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1rem;
+		margin-bottom: 4rem;
+	}
+	
+	.contact-item {
+		display: flex;
+		align-items: center;
+		padding: 1rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+	
+	.contact-item:hover {
+		transform: translateY(-2px);
+		border-color: rgb(var(--accent));
+		background: var(--bg-card-hover);
+	}
+	
+	.icon {
+		font-size: 1.5rem;
+		margin-right: 1rem;
+	}
+	
+	.label {
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		margin-right: auto;
+	}
+	
+	.value {
+		color: var(--text-main);
+		font-weight: 600;
+	}
+
+	.quote {
+		font-size: 1.5rem;
+		font-style: italic;
+		text-align: center;
+		color: rgb(var(--accent));
+		border-left: none;
+		padding: 2rem;
+		background: rgba(var(--accent), 0.1);
+		border-radius: 8px;
+		margin: 0;
+	}
+</style>

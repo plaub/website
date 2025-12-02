@@ -1,0 +1,125 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BackgroundEffect from '../components/BackgroundEffect.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Pierre Laub – endurance & creativity" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+		<script is:inline>
+			const theme = (() => {
+				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+					return localStorage.getItem('theme');
+				}
+				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					return 'dark';
+				}
+				return 'light';
+			})();
+		
+			if (theme === 'light') {
+				document.documentElement.setAttribute('data-theme', 'light');
+				document.documentElement.classList.remove('dark');
+			} else {
+				document.documentElement.setAttribute('data-theme', 'dark');
+				document.documentElement.classList.add('dark');
+			}
+			window.localStorage.setItem('theme', theme);
+		</script>
+	</head>
+	<body>
+		<BackgroundEffect />
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+
+		/* Dark theme (default) */
+		--bg-body: #13151a;
+		--bg-header: #1a1d23;
+		--bg-card: #23262d;
+		--bg-card-hover: #2a2d35;
+		--border-color: #2d323b;
+		--text-main: #ffffff;
+		--text-body: #e4e4e7;
+		--text-muted: #a1a1aa;
+	}
+
+	[data-theme="light"] {
+		--bg-body: #ffffff;
+		--bg-header: #f9fafb;
+		--bg-card: #f3f4f6;
+		--bg-card-hover: #e5e7eb;
+		--border-color: #e5e7eb;
+		--text-main: #111827;
+		--text-body: #374151;
+		--text-muted: #6b7280;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-dark)) 30%,
+			rgb(var(--accent)) 60%
+		);
+	}
+
+	html {
+		font-family: 'Inter', sans-serif;
+		background: var(--bg-body);
+		color: var(--text-main);
+	}
+	body {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+	main {
+		flex: 1;
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 2rem;
+		box-sizing: border-box;
+	}
+	a {
+		color: rgb(var(--accent-light));
+		text-decoration: none;
+	}
+	[data-theme="light"] a {
+		color: rgb(var(--accent));
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+</style>

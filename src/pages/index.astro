@@ -1,0 +1,229 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Pierre Laub – endurance & creativity">
+	<section class="hero">
+		<div class="hero-content">
+			<h1>
+				<span class="gradient-text">Endurance</span> <br />
+				& Creativity
+			</h1>
+			<p class="intro">
+				Hi, ich bin Pierre. <br />
+				Softwareentwickler, Ausdauersportler & Skateboarder.
+			</p>
+			<p class="sub-intro">
+				Ich bewege mich zwischen Sport, Technik und Kreativität – vom Triathlon über Skate-Sessions bis hin zu digitalen Projekten.
+			</p>
+			<div class="actions">
+				<a href="/ueber-mich" class="btn btn-primary">Mehr über mich</a>
+				<a href="/contact" class="btn btn-secondary">Kontakt aufnehmen</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="features">
+		<div class="section-header">
+			<h2>Entdecke mehr</h2>
+			<p>Einblicke in meine Projekte und Leidenschaften.</p>
+		</div>
+		
+		<div class="grid">
+			<a href="/triathlon-pace-rechner" class="card">
+				<div class="icon">🏃</div>
+				<h3>Pace Rechner</h3>
+				<p>Berechne deine Zielzeiten für den nächsten Triathlon oder Lauf.</p>
+				<span class="link-text">Zum Tool &rarr;</span>
+			</a>
+			<a href="/blog" class="card">
+				<div class="icon">✍️</div>
+				<h3>Blog</h3>
+				<p>Gedanken, Updates und Geschichten aus meinem Alltag.</p>
+				<span class="link-text">Zum Blog &rarr;</span>
+			</a>
+			<a href="/ueber-mich" class="card">
+				<div class="icon">👋</div>
+				<h3>Über mich</h3>
+				<p>Erfahre mehr über meinen Hintergrund und meine Motivation.</p>
+				<span class="link-text">Profil ansehen &rarr;</span>
+			</a>
+			<a href="/contact" class="card">
+				<div class="icon">📬</div>
+				<h3>Kontakt</h3>
+				<p>Lass uns connecten! Schreib mir für Projekte oder Austausch.</p>
+				<span class="link-text">Schreib mir &rarr;</span>
+			</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		padding: 4rem 0 6rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	h1 {
+		font-size: 3.5rem;
+		font-weight: 800;
+		line-height: 1.1;
+		margin-bottom: 1.5rem;
+		letter-spacing: -0.02em;
+		color: var(--text-main);
+	}
+
+	.gradient-text {
+		background: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+
+	.intro {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--text-main);
+		margin-bottom: 1rem;
+		line-height: 1.4;
+	}
+
+	.sub-intro {
+		font-size: 1.125rem;
+		color: var(--text-muted);
+		max-width: 60ch;
+		margin-bottom: 2.5rem;
+		line-height: 1.6;
+	}
+
+	.actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.btn-primary {
+		background: rgb(var(--accent));
+		color: white;
+		border: 1px solid transparent;
+	}
+	.btn-primary:hover {
+		background: rgb(var(--accent-dark));
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
+	}
+
+	.btn-secondary {
+		background: transparent;
+		color: var(--text-main);
+		border: 1px solid var(--border-color);
+	}
+	.btn-secondary:hover {
+		border-color: var(--text-muted);
+		background: var(--bg-card-hover);
+		transform: translateY(-1px);
+	}
+
+	.features {
+		padding: 2rem 0;
+	}
+
+	.section-header {
+		margin-bottom: 3rem;
+	}
+
+	.section-header h2 {
+		font-size: 2rem;
+		margin-bottom: 0.5rem;
+		color: var(--text-main);
+	}
+
+	.section-header p {
+		color: var(--text-muted);
+		font-size: 1.1rem;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 2rem;
+	}
+
+	.card {
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		padding: 2rem;
+		border-radius: 12px;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.card:hover {
+		transform: translateY(-4px);
+		border-color: rgb(var(--accent));
+		box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+		background-color: var(--bg-card-hover);
+	}
+
+	.icon {
+		font-size: 2rem;
+		margin-bottom: 1.5rem;
+		background: var(--bg-header);
+		width: 3.5rem;
+		height: 3.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 12px;
+		border: 1px solid var(--border-color);
+	}
+
+	.card h3 {
+		margin: 0 0 0.75rem 0;
+		font-size: 1.25rem;
+		color: var(--text-main);
+		font-weight: 700;
+	}
+
+	.card p {
+		margin: 0 0 1.5rem 0;
+		color: var(--text-muted);
+		line-height: 1.6;
+		flex-grow: 1;
+	}
+
+	.link-text {
+		color: rgb(var(--accent));
+		font-weight: 600;
+		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+	
+	@media (max-width: 768px) {
+		h1 {
+			font-size: 2.5rem;
+		}
+		.hero {
+			padding: 2rem 0 4rem;
+		}
+	}
+</style>

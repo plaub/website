@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Über mich - Pierre Laub">
+	<div class="content-wrapper">
+		<h1>Über mich</h1>
+		
+		<section class="intro">
+			<p>
+				Mein Name ist Pierre Laub, ich wurde 1989 im Saarland geboren und arbeite seit vielen Jahren als Softwareentwickler in einem internationalen Startup. Neben meiner Begeisterung für Technik und Produktentwicklung prägt mich meine Leidenschaft für Ausdauersport, Bewegung und Kreativität – vom Triathlon über Skateboarding bis hin zu Film- und Fotoprojekten.
+			</p>
+		</section>
+
+		<section>
+			<h2>Ausdauersport & Bewegung</h2>
+			<p>
+				Meine sportliche Reise begann 2015 nach einer langen Handballzeit, als ich meinen ersten Triathlon absolvierte. Seitdem hat mich der Ausdauersport nicht mehr losgelassen. Ich liebe die Balance zwischen strukturierter Trainingsplanung und der mentalen Ruhe, die lange Einheiten mit sich bringen.
+			</p>
+			<p>
+				Ob beim Laufen im Wald, auf dem Rad in den Bergen oder im offenen Wasser – für mich steht Freude an der Bewegung und kontinuierliche Weiterentwicklung im Mittelpunkt, nicht allein die Jagd nach Bestzeiten.
+			</p>
+		</section>
+
+		<section>
+			<h2>Skateboarding – die kreative Seite des Sports</h2>
+			<p>
+				Seit einigen Jahren habe ich auch meine alte Leidenschaft fürs Skateboarden wiederentdeckt. Es ist für mich ein Gegenpol zur strukturierten Trainingswelt – spontan, verspielt, kreativ. Ich genieße es, neue Tricks zu lernen, kleine DIY-Obstacles zu bauen und einfach Spaß an der Bewegung zu haben – ganz ohne Leistungsdruck.
+			</p>
+		</section>
+
+		<section>
+			<h2>Beruf & Technik</h2>
+			<p>
+				Beruflich arbeite ich als Fullstack-Entwickler mit Schwerpunkt auf modernen Frontend-Frameworks wie Vue und Angular sowie Backend-Technologien wie C#, .NET, PHP und Node.js.
+			</p>
+			<p>
+				Ich liebe es, komplexe Ideen in klare, intuitive Anwendungen zu übersetzen und Projekte umzusetzen, die Technik mit echten Nutzererlebnissen verbinden. Besonders spannend finde ich Schnittstellen zwischen Sport, Daten und Technologie – etwa Tools zur Trainingsanalyse oder Routenvisualisierung.
+			</p>
+		</section>
+
+		<section>
+			<h2>Foto & Filmproduktion</h2>
+			<p>
+				Aus meiner Leidenschaft für Sport ist auch ein Interesse an Foto- und Videoproduktion entstanden. Ich filme und schneide regelmäßig kurze Clips rund um Triathlon, Laufen und Skateboarding – von Trainingsmomenten über Race Days bis zu kreativen Kurzprojekten.
+			</p>
+			<p>
+				Dabei geht es mir weniger um Perfektion, sondern darum, Bewegung und Atmosphäre authentisch einzufangen. Mit Kamera, Gimbal oder GoPro experimentiere ich gerne, um sportliche Geschichten auf moderne, emotionale Weise zu erzählen.
+			</p>
+		</section>
+
+		<section>
+			<h2>Motivation</h2>
+			<p>
+				Mich motiviert die Kombination aus Neugier, Bewegung und Kreativität – im Sport wie im Beruf. Ob beim Coden, auf dem Rad oder mit der Kamera: Ich liebe es, Dinge zu gestalten, dazuzulernen und den eigenen Flow zu finden.
+			</p>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.content-wrapper {
+		max-width: 700px;
+		margin: 0 auto;
+	}
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 800;
+		margin-bottom: 2rem;
+		background: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	section {
+		margin-bottom: 3rem;
+	}
+	h2 {
+		font-size: 1.5rem;
+		color: var(--text-main);
+		margin-bottom: 1rem;
+		border-left: 4px solid rgb(var(--accent));
+		padding-left: 1rem;
+	}
+	p {
+		line-height: 1.7;
+		color: var(--text-muted);
+		margin-bottom: 1rem;
+		font-size: 1.05rem;
+	}
+	.intro p {
+		font-size: 1.2rem;
+		color: var(--text-body);
+	}
+</style>
