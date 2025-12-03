@@ -4,7 +4,7 @@ description: 'Ausdauertraining ist wohl für die meisten Menschen die einfachste
 pubDate: 2020-04-25
 categories: ["Allgemein","Sport","Training"]
 author: 'Pierre'
-image: "/uploads/2020/04/E14E389D-B3F5-41CE-AC86-04D2679530C9_1_201_a-scaled-e1587739508901.jpeg"
+image: "/uploads/2020/04/E14E389D-B3F5-41CE-AC86-04D2679530C9_1_201_a.jpeg"
 ---
 
 Ausdauertraining ist wohl für die meisten Menschen die einfachste Art, etwas in Schwung zu kommen und mit Sport anzufangen, theoretisch zumindest. Ganz so einfach ist es natürlich nicht, denn die anfängliche Motivation, die ab und zu kommt, ist meist genauso schnell wieder weg, wie sie gekommen ist. Um das zu vermeiden und nachhaltig einen Einstieg in das Ausdauertraining zu finden, bekommst du in diesem Beitrag hilfreiche Tips.

@@ -5,7 +5,7 @@ pubDate: 2015-07-12
 categories: ["Sport","Wettkämpfe"]
 tags: ["Laufen","Radfahren","Schwimmen","Triathlon"]
 author: 'Pierre'
-image: "/uploads/2017/05/Foto-12.07.15-10-53-44-e1493647100625.jpg"
+image: "/uploads/2017/05/Foto-12.07.15-10-53-44.jpg"
 ---
 
 Am 12.07.2015 habe ich bei meinem ersten Triathlon teilgenommen. Beim Jedermann Triathlon in St. Ingbert schwimmt man 300 m im Freibad, fährt 20 km Rad und läuft 5 km. Mein Ziel für diesen Wettkampf war einfach nur Spaß haben und im Ziel ankommen, vor allem beim Schwimmen. Die Vorbereitung auf den ersten Triathlon war sehr übersichtlich, wenn man es überhaupt Vorbereitung nennen kann. Man kann an einer Hand abzählen, wie oft ich schwimmen und Fahrrad fahren war. Da ich zu dieser Zeit als Handballer aktiv war, sollte das Laufen kein Problem sein.

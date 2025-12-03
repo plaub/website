@@ -4,7 +4,7 @@ description: 'Die StVO beschreibt Regeln für alle Verkehrsteilnehmer. Aus Rück
 pubDate: 2020-04-28
 categories: ["Allgemein"]
 author: 'Pierre'
-image: "/uploads/2020/04/white-bicycle-road-sign-686230-scaled.jpg"
+image: "/uploads/2020/04/white-bicycle-road-sign-686230.jpg"
 ---
 
 Die StVO beschreibt Regeln für alle Verkehrsteilnehmer. Aus Rücksicht und um Unfälle zu vermeiden, sollten sich auch alle Verkehrsteilnehmer daran halten. Dazu zählen Fahrradfahrer, genauso wie PKW-Fahrer, Rollerfahrer oder Fußgänger.

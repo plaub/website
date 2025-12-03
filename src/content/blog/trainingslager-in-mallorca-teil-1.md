@@ -5,7 +5,7 @@ pubDate: 2017-05-08
 categories: ["Sport"]
 tags: ["Trainingslager","Triathlon"]
 author: 'Pierre'
-image: "/uploads/2017/05/img_0690-scaled.jpg"
+image: "/uploads/2017/05/img_0690.jpg"
 ---
 
 Am 5.5.2017 ging es mit dem Flugzeug Richtung Mallorca ins Trainingslager. Für mich war dies der erste Flug meines Lebens und auch das erste Trainingslager in diesem Ausmaß. Geplant waren etwa 500km Rad fahren mit ein paar Läufchen zwischendurch, mit jeweils 2 Tagen Belastung und einem Ruhetag dazwischen.
