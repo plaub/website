@@ -50,7 +50,8 @@ jobs:
 
           # Commands to execute on your Linux server:
           script: |
-            IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:latest
+            IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:${{ github.sha }}
+            IMAGE_TAG_LATEST=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:latest
             LIVE_CONTAINER_NAME=astro_website_live
             NEW_CONTAINER_NAME=astro_website_staging
 
@@ -60,10 +61,13 @@ jobs:
             STAGING_PORT=4322 
 
             echo "1. Pulling new image from Docker Hub..."
+            # Use SHA-specific tag to ensure we get the exact new build
             docker pull $IMAGE_TAG
+            # Also pull latest for reference
+            docker pull $IMAGE_TAG_LATEST
 
             echo "2. Starting new container alongside the old one on port $STAGING_PORT..."
-            # Start the new container on the staging port (maps $STAGING_PORT:80)
+            # Start the new container on the staging port using SHA-specific tag
             docker run -d \
               --name $NEW_CONTAINER_NAME \
               -p $STAGING_PORT:80 \
@@ -93,7 +97,7 @@ jobs:
             docker stop $NEW_CONTAINER_NAME
             docker rm $NEW_CONTAINER_NAME
 
-            # Start the container again, now using the final LIVE_PORT (4321:80)
+            # Start the container again, now using the final LIVE_PORT (4321:80) with SHA-specific tag
             docker run -d \
               --name $LIVE_CONTAINER_NAME \
               -p $LIVE_PORT:80 \
@@ -101,6 +105,7 @@ jobs:
               $IMAGE_TAG
 
             echo "5. Cleaning up old Docker images..."
-            docker image prune -f
+            docker image prune -af --filter "until=24h"
 
             echo "✅ Deployment finished successfully!"
+            echo "📦 Deployed image: $IMAGE_TAG"
