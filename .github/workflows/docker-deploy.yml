@@ -60,6 +60,9 @@ jobs:
             # 💡 TEMPORARY PORT: Used for the health check
             STAGING_PORT=4322 
 
+            echo "0. Logging into Docker Hub..."
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
             echo "1. Pulling new image from Docker Hub..."
             # Use SHA-specific tag to ensure we get the exact new build
             docker pull $IMAGE_TAG
@@ -106,6 +109,9 @@ jobs:
 
             echo "5. Cleaning up old Docker images..."
             docker image prune -af --filter "until=24h"
+
+            echo "6. Logging out from Docker Hub..."
+            docker logout
 
             echo "✅ Deployment finished successfully!"
             echo "📦 Deployed image: $IMAGE_TAG"
