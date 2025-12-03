@@ -101,6 +101,8 @@ Der Deployment-Job führt die Blue/Green-Strategie über SSH aus. Der Live-Port 
 
 ### 1. GitHub Actions Job: deploy
 
+**Wichtig:** Der Deployment-Job verwendet den **SHA-spezifischen Tag** (`${{ github.sha }}`), um sicherzustellen, dass bei jedem Deployment das exakte neue Image verwendet wird. Dies verhindert Caching-Probleme, die beim Einsatz von `latest` auftreten können.
+
 ```yaml
 deploy:
   needs: build-and-push
@@ -113,21 +115,29 @@ deploy:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:latest
+          IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:${{ github.sha }}
+          IMAGE_TAG_LATEST=${{ secrets.DOCKERHUB_USERNAME }}/astro-app:latest
           LIVE_CONTAINER_NAME=astro_website_live
           NEW_CONTAINER_NAME=astro_website_staging
           LIVE_PORT=4321
           STAGING_PORT=4322
 
-          echo "1. Pulling image and starting on $STAGING_PORT..."
+          echo "0. Logging into Docker Hub..."
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+          echo "1. Pulling new image from Docker Hub..."
+          # Use SHA-specific tag to ensure we get the exact new build
           docker pull $IMAGE_TAG
+          docker pull $IMAGE_TAG_LATEST
+
+          echo "2. Starting new container on $STAGING_PORT..."
           docker run -d \
             --name $NEW_CONTAINER_NAME \
             -p $STAGING_PORT:80 \
             --restart on-failure \
             $IMAGE_TAG
 
-          echo "2. Health check (via $STAGING_PORT)..."
+          echo "3. Health check (via $STAGING_PORT)..."
           sleep 10
           if ! wget --spider -q http://localhost:$STAGING_PORT; then
             echo "❌ Health check failed! Rolling back..."
@@ -135,12 +145,13 @@ deploy:
             docker rm $NEW_CONTAINER_NAME || true
             exit 1
           fi
+          echo "✅ Health check passed!"
 
-          echo "3. Stopping old container ($LIVE_PORT) and switching traffic..."
+          echo "4. Stopping old container ($LIVE_PORT) and switching traffic..."
           docker stop $LIVE_CONTAINER_NAME || true
           docker rm $LIVE_CONTAINER_NAME || true
 
-          # Rename/Rerun the proven healthy image on the LIVE_PORT
+          # Rerun the proven healthy image on the LIVE_PORT
           docker stop $NEW_CONTAINER_NAME
           docker rm $NEW_CONTAINER_NAME
           docker run -d \
@@ -149,9 +160,26 @@ deploy:
             --restart always \
             $IMAGE_TAG
 
-          echo "4. Cleanup..."
-          docker image prune -f
+          echo "5. Cleaning up old Docker images..."
+          docker image prune -af --filter "until=24h"
+
+          echo "6. Logging out from Docker Hub..."
+          docker logout
+
+          echo "✅ Deployment finished successfully!"
+          echo "📦 Deployed image: $IMAGE_TAG"
 ```
+
+### 2. Kritische Deployment-Optimierungen
+
+**Problem beim zweiten Deployment:** Wenn nur der `latest`-Tag verwendet wird, kann Docker gecachte Images verwenden und nicht das neue Image pullen, wodurch der Content nicht aktualisiert wird.
+
+**Lösung:**
+
+- **SHA-basiertes Tagging**: Jedes Build wird mit dem Commit-SHA getaggt (`${{ github.sha }}`), was eindeutige Image-Versionen garantiert
+- **Docker Login auf dem Server**: Der Deployment-Server muss sich bei Docker Hub authentifizieren, um private Images zu pullen
+- **Aggressives Cleanup**: `docker image prune -af --filter "until=24h"` entfernt alte Images und verhindert Cache-Probleme
+- **Explizites Logout**: Nach dem Deployment wird der Server aus Sicherheitsgründen wieder abgemeldet
 
 ## V. Lokale Entwicklung (Dev Environment) 🧑‍💻
 
@@ -175,7 +203,9 @@ services:
 Dieses Setup gewährleistet ein hohes Maß an Betriebssicherheit:
 
 - **Zero Downtime**: Die Umschaltung erfolgt erst, nachdem der neue Container als gesund validiert wurde.
-- **Immutability**: Jeder Deployment-Vorgang basiert auf einem unveränderlichen Docker Image.
-- **Security**: Trennung von Deployment-User und SSH-Keys von der Root-Umgebung.
+- **Immutability**: Jeder Deployment-Vorgang basiert auf einem unveränderlichen Docker Image mit eindeutigem SHA-Tag.
+- **Security**: Trennung von Deployment-User und SSH-Keys von der Root-Umgebung, plus automatisches Logout nach Deployment.
+- **Zuverlässigkeit**: SHA-basiertes Tagging verhindert Cache-Probleme und garantiert, dass immer die neueste Version deployed wird.
+- **Nachvollziehbarkeit**: Jedes Image ist mit dem Commit-SHA getaggt, was vollständige Traceability ermöglicht.
 
-Die Architektur ist somit hochgradig skalierbar und wartungsarm.
+Die Architektur ist somit hochgradig skalierbar, wartungsarm und produktionsreif.
