@@ -1,229 +1,373 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latestPost = posts[0];
+
+// Prüfen ob der neueste Post nicht älter als 4 Wochen ist
+const fourWeeksAgo = new Date();
+fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+const showLatestPost = latestPost && latestPost.data.pubDate >= fourWeeksAgo;
 ---
 
 <Layout title="Pierre Laub – endurance & creativity">
-	<section class="hero">
-		<div class="hero-content">
-			<h1>
-				<span class="gradient-text">Endurance</span> <br />
-				& Creativity
-			</h1>
-			<p class="intro">
-				Hi, ich bin Pierre. <br />
-				Softwareentwickler, Ausdauersportler & Skateboarder.
-			</p>
-			<p class="sub-intro">
-				Ich bewege mich zwischen Sport, Technik und Kreativität – vom Triathlon über Skate-Sessions bis hin zu digitalen Projekten.
-			</p>
-			<div class="actions">
-				<a href="/ueber-mich" class="btn btn-primary">Mehr über mich</a>
-				<a href="/contact" class="btn btn-secondary">Kontakt aufnehmen</a>
-			</div>
-		</div>
-	</section>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>
+        <span class="gradient-text">Endurance</span>
+        <br />
+        & Creativity
+      </h1>
+      <p class="intro">
+        Hi, ich bin Pierre. <br />
+        Softwareentwickler, Ausdauersportler & Skateboarder.
+      </p>
+      <p class="sub-intro">
+        Ich bewege mich zwischen Sport, Technik und Kreativität – vom Triathlon
+        über Skate-Sessions bis hin zu digitalen Projekten.
+      </p>
+      <div class="actions">
+        <a href="/ueber-mich" class="btn btn-primary">Mehr über mich</a>
+        <a href="/contact" class="btn btn-secondary">Kontakt aufnehmen</a>
+      </div>
+    </div>
+  </section>
 
-	<section class="features">
-		<div class="section-header">
-			<h2>Entdecke mehr</h2>
-			<p>Einblicke in meine Projekte und Leidenschaften.</p>
-		</div>
-		
-		<div class="grid">
-			<a href="/triathlon-pace-rechner" class="card">
-				<div class="icon">🏃</div>
-				<h3>Pace Rechner</h3>
-				<p>Berechne deine Zielzeiten für den nächsten Triathlon oder Lauf.</p>
-				<span class="link-text">Zum Tool &rarr;</span>
-			</a>
-			<a href="/blog" class="card">
-				<div class="icon">✍️</div>
-				<h3>Blog</h3>
-				<p>Gedanken, Updates und Geschichten aus meinem Alltag.</p>
-				<span class="link-text">Zum Blog &rarr;</span>
-			</a>
-			<a href="/ueber-mich" class="card">
-				<div class="icon">👋</div>
-				<h3>Über mich</h3>
-				<p>Erfahre mehr über meinen Hintergrund und meine Motivation.</p>
-				<span class="link-text">Profil ansehen &rarr;</span>
-			</a>
-			<a href="/contact" class="card">
-				<div class="icon">📬</div>
-				<h3>Kontakt</h3>
-				<p>Lass uns connecten! Schreib mir für Projekte oder Austausch.</p>
-				<span class="link-text">Schreib mir &rarr;</span>
-			</a>
-		</div>
-	</section>
+  {
+    showLatestPost && (
+      <section class="latest-post-section">
+        <div class="section-header">
+          <h2>Neuester Blog-Post</h2>
+          <p>Was es Neues gibt.</p>
+        </div>
+
+        <a href={`/blog/${latestPost.slug}`} class="latest-post-card">
+          {latestPost.data.image && (
+            <div class="post-image">
+              <img src={latestPost.data.image} alt={latestPost.data.title} />
+            </div>
+          )}
+          <div class="post-info">
+            <div class="post-meta-small">
+              <time datetime={latestPost.data.pubDate.toISOString()}>
+                {latestPost.data.pubDate.toLocaleDateString("de-DE", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+              {latestPost.data.categories &&
+                latestPost.data.categories.length > 0 && (
+                  <span class="categories">
+                    {latestPost.data.categories.slice(0, 2).join(" · ")}
+                  </span>
+                )}
+            </div>
+            <h3>{latestPost.data.title}</h3>
+            <p class="post-description">{latestPost.data.description}</p>
+            <span class="link-text">Weiterlesen &rarr;</span>
+          </div>
+        </a>
+      </section>
+    )
+  }
+
+  <section class="features">
+    <div class="section-header">
+      <h2>Entdecke mehr</h2>
+      <p>Einblicke in meine Projekte und Leidenschaften.</p>
+    </div>
+
+    <div class="grid">
+      <a href="/triathlon-pace-rechner" class="card">
+        <div class="icon">🏃</div>
+        <h3>Pace Rechner</h3>
+        <p>Berechne deine Zielzeiten für den nächsten Triathlon oder Lauf.</p>
+        <span class="link-text">Zum Tool &rarr;</span>
+      </a>
+      <a href="/blog" class="card">
+        <div class="icon">✍️</div>
+        <h3>Blog</h3>
+        <p>Gedanken, Updates und Geschichten aus meinem Alltag.</p>
+        <span class="link-text">Zum Blog &rarr;</span>
+      </a>
+      <a href="/ueber-mich" class="card">
+        <div class="icon">👋</div>
+        <h3>Über mich</h3>
+        <p>Erfahre mehr über meinen Hintergrund und meine Motivation.</p>
+        <span class="link-text">Profil ansehen &rarr;</span>
+      </a>
+      <a href="/contact" class="card">
+        <div class="icon">📬</div>
+        <h3>Kontakt</h3>
+        <p>Lass uns connecten! Schreib mir für Projekte oder Austausch.</p>
+        <span class="link-text">Schreib mir &rarr;</span>
+      </a>
+    </div>
+  </section>
 </Layout>
 
 <style>
-	.hero {
-		padding: 4rem 0 6rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
+  .hero {
+    padding: 4rem 0 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-	h1 {
-		font-size: 3.5rem;
-		font-weight: 800;
-		line-height: 1.1;
-		margin-bottom: 1.5rem;
-		letter-spacing: -0.02em;
-		color: var(--text-main);
-	}
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+  }
 
-	.gradient-text {
-		background: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
+  .gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
 
-	.intro {
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: var(--text-main);
-		margin-bottom: 1rem;
-		line-height: 1.4;
-	}
+  .intro {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
 
-	.sub-intro {
-		font-size: 1.125rem;
-		color: var(--text-muted);
-		max-width: 60ch;
-		margin-bottom: 2.5rem;
-		line-height: 1.6;
-	}
+  .sub-intro {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    max-width: 60ch;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
 
-	.actions {
-		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
+  .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
 
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.75rem 1.5rem;
-		border-radius: 8px;
-		font-weight: 600;
-		text-decoration: none;
-		transition: all 0.2s ease;
-	}
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
 
-	.btn-primary {
-		background: rgb(var(--accent));
-		color: white;
-		border: 1px solid transparent;
-	}
-	.btn-primary:hover {
-		background: rgb(var(--accent-dark));
-		transform: translateY(-1px);
-		box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
-	}
+  .btn-primary {
+    background: rgb(var(--accent));
+    color: white;
+    border: 1px solid transparent;
+  }
+  .btn-primary:hover {
+    background: rgb(var(--accent-dark));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
+  }
 
-	.btn-secondary {
-		background: transparent;
-		color: var(--text-main);
-		border: 1px solid var(--border-color);
-	}
-	.btn-secondary:hover {
-		border-color: var(--text-muted);
-		background: var(--bg-card-hover);
-		transform: translateY(-1px);
-	}
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text-muted);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+  }
 
-	.features {
-		padding: 2rem 0;
-	}
+  .features {
+    padding: 2rem 0;
+  }
 
-	.section-header {
-		margin-bottom: 3rem;
-	}
+  .latest-post-section {
+    padding: 4rem 0 3rem;
+  }
 
-	.section-header h2 {
-		font-size: 2rem;
-		margin-bottom: 0.5rem;
-		color: var(--text-main);
-	}
+  .latest-post-card {
+    display: flex;
+    gap: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
 
-	.section-header p {
-		color: var(--text-muted);
-		font-size: 1.1rem;
-	}
+  .latest-post-card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(var(--accent));
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-card-hover);
+  }
 
-	.grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 2rem;
-	}
+  .post-image {
+    flex: 0 0 300px;
+    height: 250px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-header);
+  }
 
-	.card {
-		background: var(--bg-card);
-		border: 1px solid var(--border-color);
-		padding: 2rem;
-		border-radius: 12px;
-		text-decoration: none;
-		transition: all 0.3s ease;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-	}
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-	.card:hover {
-		transform: translateY(-4px);
-		border-color: rgb(var(--accent));
-		box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
-		background-color: var(--bg-card-hover);
-	}
+  .post-info {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-	.icon {
-		font-size: 2rem;
-		margin-bottom: 1.5rem;
-		background: var(--bg-header);
-		width: 3.5rem;
-		height: 3.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 12px;
-		border: 1px solid var(--border-color);
-	}
+  .post-meta-small {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
 
-	.card h3 {
-		margin: 0 0 0.75rem 0;
-		font-size: 1.25rem;
-		color: var(--text-main);
-		font-weight: 700;
-	}
+  .categories {
+    color: rgb(var(--accent));
+    font-weight: 500;
+  }
 
-	.card p {
-		margin: 0 0 1.5rem 0;
-		color: var(--text-muted);
-		line-height: 1.6;
-		flex-grow: 1;
-	}
+  .latest-post-card h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+  }
 
-	.link-text {
-		color: rgb(var(--accent));
-		font-weight: 600;
-		font-size: 0.9rem;
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
-	
-	@media (max-width: 768px) {
-		h1 {
-			font-size: 2.5rem;
-		}
-		.hero {
-			padding: 2rem 0 4rem;
-		}
-	}
+  .post-description {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .latest-post-card .link-text {
+    margin-top: auto;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+  }
+
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(var(--accent));
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-card-hover);
+  }
+
+  .icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    background: var(--bg-header);
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    font-weight: 700;
+  }
+
+  .card p {
+    margin: 0 0 1.5rem 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .link-text {
+    color: rgb(var(--accent));
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+    .hero {
+      padding: 2rem 0 4rem;
+    }
+    .latest-post-card {
+      flex-direction: column;
+    }
+    .post-image {
+      flex: 0 0 auto;
+      height: 200px;
+      width: 100%;
+    }
+    .post-info {
+      padding: 1.5rem;
+    }
+    .latest-post-card h3 {
+      font-size: 1.5rem;
+    }
+  }
 </style>

@@ -1,11 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
-  return blogEntries.map(entry => ({
-    params: { slug: entry.slug }, props: { entry },
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
   }));
 }
 
@@ -19,32 +20,42 @@ const { Content } = await entry.render();
       <h1>{entry.data.title}</h1>
       <div class="post-meta">
         <time datetime={entry.data.pubDate.toISOString()}>
-          {entry.data.pubDate.toLocaleDateString('de-DE', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
+          {
+            entry.data.pubDate.toLocaleDateString("de-DE", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
         </time>
-        {entry.data.categories && entry.data.categories.length > 0 && (
-          <span class="post-categories">
-            {entry.data.categories.map((category, index) => (
-              <>
-                <span class="category">{category}</span>
-                {index < (entry.data.categories?.length ?? 0) - 1 && ', '}
-              </>
-            ))}
-          </span>
-        )}
+        {
+          entry.data.categories && entry.data.categories.length > 0 && (
+            <span class="post-categories">
+              {entry.data.categories.map((category, index) => (
+                <>
+                  <span class="category">{category}</span>
+                  {index < (entry.data.categories?.length ?? 0) - 1 && ", "}
+                </>
+              ))}
+            </span>
+          )
+        }
       </div>
     </header>
-    {entry.data.image && (
-      <img src={entry.data.image} alt={entry.data.title} class="featured-image" />
-    )}
+    {
+      entry.data.image && (
+        <img
+          src={entry.data.image}
+          alt={entry.data.title}
+          class="featured-image"
+        />
+      )
+    }
     <div class="content">
       <Content />
     </div>
     <div class="back-link">
-        <a href="/blog">&larr; Zurück zur Übersicht</a>
+      <a href="/blog">&larr; Zurück zur Übersicht</a>
     </div>
   </article>
 </Layout>
@@ -53,7 +64,7 @@ const { Content } = await entry.render();
   .blog-post {
     max-width: 100%;
   }
-  
+
   header {
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border-color);
@@ -89,7 +100,7 @@ const { Content } = await entry.render();
   }
 
   .post-categories::before {
-    content: '•';
+    content: "•";
     margin: 0 0.25rem;
   }
 
@@ -108,30 +119,180 @@ const { Content } = await entry.render();
     font-size: 1.1rem;
   }
 
+  /* Überschriften Styling */
   .content :global(h2) {
-    font-size: 1.8rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: 0.5rem;
   }
 
+  .content :global(h2)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background: rgb(var(--accent));
+    border-radius: 2px;
+  }
+
+  .content :global(h3) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    color: var(--text-color);
+  }
+
+  .content :global(h4) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-color);
+  }
+
+  .content :global(h5) {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .content :global(h6) {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Horizontale Trennlinien */
+  .content :global(hr) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--border-color),
+      transparent
+    );
+    margin: 3rem 0;
+  }
+
+  /* Absätze und Listen */
   .content :global(p) {
     margin-bottom: 1.5rem;
   }
 
-  .content :global(ul) {
+  .content :global(ul),
+  .content :global(ol) {
     margin-bottom: 1.5rem;
     padding-left: 1.5rem;
   }
 
   .content :global(li) {
     margin-bottom: 0.5rem;
+    line-height: 1.7;
   }
-  
+
+  .content :global(li)::marker {
+    color: rgb(var(--accent));
+  }
+
+  /* Blockquotes */
+  .content :global(blockquote) {
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 4px solid rgb(var(--accent));
+    background: var(--bg-secondary);
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .content :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Code Blöcke */
   .content :global(pre) {
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
     margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .content :global(code) {
+    font-family: "Courier New", monospace;
+    font-size: 0.9em;
+  }
+
+  .content :global(p code),
+  .content :global(li code) {
+    background: var(--bg-secondary);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+
+  /* Links */
+  .content :global(a) {
+    color: rgb(var(--accent));
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .content :global(a:hover) {
+    border-bottom-color: rgb(var(--accent));
+  }
+
+  /* Bilder */
+  .content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Tabellen */
+  .content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .content :global(th),
+  .content :global(td) {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .content :global(th) {
+    font-weight: 600;
+    background: var(--bg-secondary);
+    color: var(--text-color);
+  }
+
+  .content :global(tbody tr:hover) {
+    background: var(--bg-secondary);
   }
 
   .back-link {
