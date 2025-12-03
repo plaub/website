@@ -1,7 +1,7 @@
 <template>
   <div class="pace-rechner">
     <!-- Tab Navigation -->
-    <div class="max-w-6xl mx-auto px-4 mb-4">
+    <div class="max-w-6xl mx-auto px-3 mb-4">
       <nav class="tab-nav">
         <div class="flex">
           <button
@@ -153,6 +153,26 @@ export default {
 @media (max-width: 768px) {
   body {
     padding-bottom: 80px;
+  }
+
+  .tab-nav {
+    padding: 0.25rem;
+  }
+
+  .tab-nav .flex {
+    gap: 0.25rem;
+  }
+
+  .tab-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tab-icon {
+    font-size: 1rem;
+    margin-right: 0;
   }
 }
 </style>

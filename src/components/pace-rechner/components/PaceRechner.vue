@@ -16,7 +16,7 @@
         id="presets"
         @change="handlePresetChange"
         v-model="preset"
-        class="bg-white rounded select"
+        class="rounded select"
       >
         <option value="">Vorlagen</option>
         <option
@@ -934,6 +934,8 @@ const loadCalculationData = async (calculation: any) => {
     border: 4px solid #333;
     border-radius: 28px;
     padding: 8px;
+    background: var(--bg-card);
+    color: var(--text-main);
   }
 
   ::v-deep(.vue__time-picker .vue__time-picker-input) {
