@@ -16,9 +16,13 @@ const posts = (await getCollection('blog')).sort(
 			{posts.map((post) => (
 				<li>
 					<a href={`/blog/${post.slug}`} class="post-link">
-						<h2 class="post-title">
-							{post.data.title}
-						</h2>
+						{post.data.image && (
+							<img src={post.data.image} alt={post.data.title} class="post-thumbnail" />
+						)}
+						<div class="post-content">
+							<h2 class="post-title">
+								{post.data.title}
+							</h2>
 						<div class="post-meta">
 							<time datetime={post.data.pubDate.toISOString()}>
 								{post.data.pubDate.toLocaleDateString('de-DE', {
@@ -27,10 +31,21 @@ const posts = (await getCollection('blog')).sort(
 									day: 'numeric',
 								})}
 							</time>
+							{post.data.categories && post.data.categories.length > 0 && (
+								<span class="post-categories">
+									{post.data.categories.map((category, index) => (
+										<>
+											<span class="category">{category}</span>
+											{index < (post.data.categories?.length ?? 0) - 1 && ', '}
+										</>
+									))}
+								</span>
+							)}
 						</div>
-						<p class="post-description">
-							{post.data.description}
-						</p>
+								<p class="post-description">
+									{post.data.description}
+								</p>
+							</div>
 					</a>
 				</li>
 			))}
@@ -72,10 +87,23 @@ const posts = (await getCollection('blog')).sort(
 	}
 
 	.post-link {
-		display: block;
+		display: flex;
+		gap: 1.5rem;
 		text-decoration: none;
 		color: inherit;
 		transition: transform 0.2s ease;
+	}
+
+	.post-thumbnail {
+		width: 200px;
+		height: 150px;
+		object-fit: cover;
+		border-radius: 8px;
+		flex-shrink: 0;
+	}
+
+	.post-content {
+		flex: 1;
 	}
 
 	.post-link:hover {
@@ -97,6 +125,25 @@ const posts = (await getCollection('blog')).sort(
 		font-size: 0.9rem;
 		color: var(--text-muted);
 		margin-bottom: 0.5rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.post-categories {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.post-categories::before {
+		content: '•';
+		margin: 0 0.25rem;
+	}
+
+	.category {
+		font-size: 0.85rem;
+		color: rgb(var(--accent));
 	}
 
 	.post-description {

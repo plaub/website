@@ -1,0 +1,9 @@
+---
+title: 'UWP - Windows Phone 10 - Statusleiste/Statusbar stylen'
+description: 'In diesem Beispiel zeige ich, wie man bei einer Windows Phone 10 App die Statusleiste verändern kann. Zuerst registriert man in der App.cs oder einer beliebigen'
+pubDate: 2015-10-10
+categories: ["Apps","Programmierung","UWP"]
+author: 'Pierre'
+---
+
+In diesem Beispiel zeige ich, wie man bei einer Windows Phone 10 App die Statusleiste verändern kann. Zuerst registriert man in der App.cs oder einer beliebigen Seite eine Methode "Current\_Activated" für den Eventhandler "Window.Current.Activated" (am besten im Constructor der Seite). \[code lang="csharp"\] Window.Current.Activated += Current\_Activated; \[/code\] Danach Implementer man die Methode Current\_Activated: \[code lang="csharp"\] private void Current\_Activated(object sender, WindowActivatedEventArgs e) { styleStatusLeiste(); } private void styleStatusLeiste() { if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons")) { var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView(); Windows.UI.Color green = new Windows.UI.Color(); green.R = 101; green.G = 172; green.B = 30; green.A = 1; statusBar.BackgroundColor = green; statusBar.BackgroundOpacity = 1; Windows.UI.Color White = new Windows.UI.Color(); statusBar.ForegroundColor = White; } } \[/code\] In der If Abfrage wird geprüft ob Hardware Buttons existieren. Wenn ja, weis man, dass das Gerät ein Phone oder Tablett ist. Und schon hat man eine Grüne Statusleiste mit weiser Schrift. Man könnte die Methode styleStatusLeiste auch ohne den Eventhandler ausführen beim Aufrufen der Seite, jedoch würde dann beim minimieren der App und erneutem Anzeigen, der Syle fehlen.,

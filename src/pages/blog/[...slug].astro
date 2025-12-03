@@ -17,14 +17,29 @@ const { Content } = await entry.render();
   <article class="blog-post">
     <header>
       <h1>{entry.data.title}</h1>
-      <p class="date">
-        {entry.data.pubDate.toLocaleDateString('de-DE', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}
-      </p>
+      <div class="post-meta">
+        <time datetime={entry.data.pubDate.toISOString()}>
+          {entry.data.pubDate.toLocaleDateString('de-DE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </time>
+        {entry.data.categories && entry.data.categories.length > 0 && (
+          <span class="post-categories">
+            {entry.data.categories.map((category, index) => (
+              <>
+                <span class="category">{category}</span>
+                {index < (entry.data.categories?.length ?? 0) - 1 && ', '}
+              </>
+            ))}
+          </span>
+        )}
+      </div>
     </header>
+    {entry.data.image && (
+      <img src={entry.data.image} alt={entry.data.title} class="featured-image" />
+    )}
     <div class="content">
       <Content />
     </div>
@@ -45,10 +60,42 @@ const { Content } = await entry.render();
     padding-bottom: 1rem;
   }
 
+  .featured-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
   h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
     line-height: 1.2;
+  }
+
+  .post-meta {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .post-categories {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .post-categories::before {
+    content: '•';
+    margin: 0 0.25rem;
+  }
+
+  .category {
+    font-size: 0.85rem;
+    color: rgb(var(--accent));
   }
 
   .date {
