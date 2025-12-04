@@ -1,136 +1,148 @@
 <canvas id="bg-effect"></canvas>
 
 <style>
-	#bg-effect {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		pointer-events: none;
-		opacity: 0.6;
-	}
+  #bg-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+  }
 </style>
 
 <script>
-	const canvas = document.getElementById('bg-effect') as HTMLCanvasElement;
-	const ctx = canvas.getContext('2d');
+  const canvas = document.getElementById("bg-effect") as HTMLCanvasElement;
+  const ctx = canvas.getContext("2d");
 
-	let particles: Particle[] = [];
-	let animationFrameId: number;
-	let mouse = { x: -1000, y: -1000 };
+  // Disable animation on mobile/touch devices
+  const isTouchDevice =
+    "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-	class Particle {
-		x: number;
-		y: number;
-		vx: number;
-		vy: number;
-		size: number;
-		baseX: number;
-		baseY: number;
-		density: number;
+  let particles: Particle[] = [];
+  let animationFrameId: number;
+  let mouse = { x: -1000, y: -1000 };
 
-		constructor(x: number, y: number) {
-			this.x = x;
-			this.y = y;
-			this.baseX = x;
-			this.baseY = y;
-			this.vx = (Math.random() - 0.5) * 0.5;
-			this.vy = (Math.random() - 0.5) * 0.5;
-			this.size = Math.random() * 2 + 1;
-			this.density = (Math.random() * 30) + 1;
-		}
+  class Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    baseX: number;
+    baseY: number;
+    density: number;
 
-		draw() {
-			if (!ctx) return;
-			ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#a1a1aa';
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-			ctx.closePath();
-			ctx.fill();
-		}
+    constructor(x: number, y: number) {
+      this.x = x;
+      this.y = y;
+      this.baseX = x;
+      this.baseY = y;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2 + 1;
+      this.density = Math.random() * 30 + 1;
+    }
 
-		update() {
-			// Mouse interaction (Antigravity effect)
-			let dx = mouse.x - this.x;
-			let dy = mouse.y - this.y;
-			let distance = Math.sqrt(dx * dx + dy * dy);
-			let forceDirectionX = dx / distance;
-			let forceDirectionY = dy / distance;
-			let maxDistance = 150;
-			let force = (maxDistance - distance) / maxDistance;
-			let directionX = forceDirectionX * force * this.density;
-			let directionY = forceDirectionY * force * this.density;
+    draw() {
+      if (!ctx) return;
+      ctx.fillStyle =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--text-muted")
+          .trim() || "#a1a1aa";
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fill();
+    }
 
-			if (distance < maxDistance) {
-				this.x -= directionX;
-				this.y -= directionY;
-			} else {
-				// Return to base position (or just float)
-				if (this.x !== this.baseX) {
-					let dx = this.x - this.baseX;
-					this.x -= dx / 50; // Slow return
-				}
-				if (this.y !== this.baseY) {
-					let dy = this.y - this.baseY;
-					this.y -= dy / 50;
-				}
-			}
-			
-			// Add subtle floating movement
-			this.x += this.vx;
-			this.y += this.vy;
+    update() {
+      // Skip movement on touch devices
+      if (isTouchDevice) return;
 
-			// Bounce off base area slightly to keep them moving
-			if (Math.abs(this.x - this.baseX) > 20) this.vx = -this.vx;
-			if (Math.abs(this.y - this.baseY) > 20) this.vy = -this.vy;
-		}
-	}
+      // Mouse interaction (Antigravity effect)
+      let dx = mouse.x - this.x;
+      let dy = mouse.y - this.y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+      let forceDirectionX = dx / distance;
+      let forceDirectionY = dy / distance;
+      let maxDistance = 150;
+      let force = (maxDistance - distance) / maxDistance;
+      let directionX = forceDirectionX * force * this.density;
+      let directionY = forceDirectionY * force * this.density;
 
-	function init() {
-		particles = [];
-		const numberOfParticles = (window.innerWidth * window.innerHeight) / 15000; // Density
-		for (let i = 0; i < numberOfParticles; i++) {
-			let x = Math.random() * window.innerWidth;
-			let y = Math.random() * window.innerHeight;
-			particles.push(new Particle(x, y));
-		}
-	}
+      if (distance < maxDistance) {
+        this.x -= directionX;
+        this.y -= directionY;
+      } else {
+        // Return to base position (or just float)
+        if (this.x !== this.baseX) {
+          let dx = this.x - this.baseX;
+          this.x -= dx / 50; // Slow return
+        }
+        if (this.y !== this.baseY) {
+          let dy = this.y - this.baseY;
+          this.y -= dy / 50;
+        }
+      }
 
-	function animate() {
-		if (!ctx) return;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		
-		for (let i = 0; i < particles.length; i++) {
-			particles[i].draw();
-			particles[i].update();
-		}
-		animationFrameId = requestAnimationFrame(animate);
-	}
+      // Add subtle floating movement
+      this.x += this.vx;
+      this.y += this.vy;
 
-	function resize() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		init();
-	}
+      // Bounce off base area slightly to keep them moving
+      if (Math.abs(this.x - this.baseX) > 20) this.vx = -this.vx;
+      if (Math.abs(this.y - this.baseY) > 20) this.vy = -this.vy;
+    }
+  }
 
-	// Event Listeners
-	window.addEventListener('resize', resize);
-	
-	window.addEventListener('mousemove', (e) => {
-		mouse.x = e.x;
-		mouse.y = e.y;
-	});
+  function init() {
+    particles = [];
+    const numberOfParticles = (window.innerWidth * window.innerHeight) / 15000; // Density
+    for (let i = 0; i < numberOfParticles; i++) {
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * window.innerHeight;
+      particles.push(new Particle(x, y));
+    }
+  }
 
-	// Init
-	resize();
-	animate();
+  function animate() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	// Re-init on theme change to update color
-	const observer = new MutationObserver(() => {
-		// Force redraw with new color
-	});
-	observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].draw();
+      particles[i].update();
+    }
+    animationFrameId = requestAnimationFrame(animate);
+  }
 
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+  }
+
+  // Event Listeners
+  window.addEventListener("resize", resize);
+
+  window.addEventListener("mousemove", (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  });
+
+  // Init
+  resize();
+  animate();
+
+  // Re-init on theme change to update color
+  const observer = new MutationObserver(() => {
+    // Force redraw with new color
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
 </script>
