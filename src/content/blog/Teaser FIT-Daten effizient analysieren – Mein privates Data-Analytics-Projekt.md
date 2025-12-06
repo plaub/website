@@ -1,10 +1,11 @@
 ---
 title: "Teaser: FIT-Daten effizient analysieren – Mein privates Data-Analytics-Projekt"
 description: "Ein Überblick über meine optimierte Hybrid-Architektur zur Analyse von FIT-Daten in der Google Cloud."
-date: 2025-12-06
+date: 2025-12-05
 categories: ["Data Analytics", "Google Cloud", "Python"]
 author: "Pierre"
-pubDate: 2025-12-06
+pubDate: 2025-12-05
+isFeatured: true
 ---
 
 # Teaser: FIT-Daten effizient analysieren – Mein privates Data-Analytics-Projekt
@@ -18,3 +19,5 @@ Ich zeige Dir, wie ich eine optimierte Hybrid-Architektur für dieses Projekt au
 *   **Lernziel Kostenkontrolle:** Ein gecachtes API-Backend (Python/Flask) auf Linux fängt die meisten Anfragen ab und dient als notwendige Kostenschranke vor BigQuery.
 
 Folge der Doku und lerne, wie Du ein robustes und ressourceneffizientes Data-Analytics-Setup für Deine privaten Projekte bauen kannst!
+
+Hier geht es zum ersten Teil der Serie: [Python ETL-Pipeline: FIT-Daten effizient in BigQuery analysieren](/blog/python-etl-pipeline-fit-daten-effizient-in-bigquery-analysieren)
