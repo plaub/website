@@ -17,13 +17,23 @@
   const canvas = document.getElementById("bg-effect") as HTMLCanvasElement;
   const ctx = canvas.getContext("2d");
 
-  // Disable animation on mobile/touch devices
-  const isTouchDevice =
-    "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  // More robust touch device detection (iOS Safari, etc.)
+  const isTouchDevice = (() => {
+    // Check for touch events
+    if ("ontouchstart" in window) return true;
+    // Check for max touch points
+    if (navigator.maxTouchPoints > 0) return true;
+    // Check for mobile user agent as fallback
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) return true;
+    // Check for small screen size as additional indicator
+    if (window.innerWidth <= 768) return true;
+    return false;
+  })();
 
   let particles: Particle[] = [];
   let animationFrameId: number;
   let mouse = { x: -1000, y: -1000 };
+  let isInitialized = false;
 
   class Particle {
     x: number;
@@ -99,6 +109,9 @@
   }
 
   function init() {
+    // Prevent multiple initializations
+    if (isInitialized) return;
+    
     particles = [];
     const numberOfParticles = (window.innerWidth * window.innerHeight) / 15000; // Density
     for (let i = 0; i < numberOfParticles; i++) {
@@ -106,6 +119,8 @@
       let y = Math.random() * window.innerHeight;
       particles.push(new Particle(x, y));
     }
+    
+    isInitialized = true;
   }
 
   function animate() {
@@ -122,20 +137,29 @@
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    init();
+    // Only init if not already initialized
+    if (!isInitialized) {
+      init();
+    }
   }
 
   // Event Listeners
   window.addEventListener("resize", resize);
 
   window.addEventListener("mousemove", (e) => {
+    // Disable mouse interaction on touch devices
+    if (isTouchDevice) return;
     mouse.x = e.x;
     mouse.y = e.y;
   });
 
-  // Init
+  // Init only once
   resize();
-  animate();
+  
+  // Only animate on non-touch devices
+  if (!isTouchDevice) {
+    animate();
+  }
 
   // Re-init on theme change to update color
   const observer = new MutationObserver(() => {
