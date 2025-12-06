@@ -3,14 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const latestPost = posts[0];
 
-// Prüfen ob der neueste Post nicht älter als 4 Wochen ist
-const fourWeeksAgo = new Date();
-fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
-const showLatestPost = latestPost && latestPost.data.pubDate >= fourWeeksAgo;
+const featuredPosts = posts.filter((post) => post.data.isFeatured);
+const postsToDisplay =
+  featuredPosts.length > 0 ? featuredPosts : posts.length > 0 ? [posts[0]] : [];
+const sectionTitle =
+  featuredPosts.length > 0 ? "Empfohlene Beiträge" : "Neuester Blog-Post";
 ---
 
 <Layout title="Pierre Laub – endurance & creativity">
@@ -37,40 +37,43 @@ const showLatestPost = latestPost && latestPost.data.pubDate >= fourWeeksAgo;
   </section>
 
   {
-    showLatestPost && (
+    postsToDisplay.length > 0 && (
       <section class="latest-post-section">
         <div class="section-header">
-          <h2>Neuester Blog-Post</h2>
+          <h2>{sectionTitle}</h2>
           <p>Was es Neues gibt.</p>
         </div>
 
-        <a href={`/blog/${latestPost.slug}`} class="latest-post-card">
-          {latestPost.data.image && (
-            <div class="post-image">
-              <img src={latestPost.data.image} alt={latestPost.data.title} />
-            </div>
-          )}
-          <div class="post-info">
-            <div class="post-meta-small">
-              <time datetime={latestPost.data.pubDate.toISOString()}>
-                {latestPost.data.pubDate.toLocaleDateString("de-DE", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-              {latestPost.data.categories &&
-                latestPost.data.categories.length > 0 && (
-                  <span class="categories">
-                    {latestPost.data.categories.slice(0, 2).join(" · ")}
-                  </span>
-                )}
-            </div>
-            <h3>{latestPost.data.title}</h3>
-            <p class="post-description">{latestPost.data.description}</p>
-            <span class="link-text">Weiterlesen &rarr;</span>
-          </div>
-        </a>
+        <div class="posts-stack">
+          {postsToDisplay.map((post) => (
+            <a href={`/blog/${post.slug}`} class="latest-post-card">
+              {post.data.image && (
+                <div class="post-image">
+                  <img src={post.data.image} alt={post.data.title} />
+                </div>
+              )}
+              <div class="post-info">
+                <div class="post-meta-small">
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString("de-DE", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                  {post.data.categories && post.data.categories.length > 0 && (
+                    <span class="categories">
+                      {post.data.categories.slice(0, 2).join(" · ")}
+                    </span>
+                  )}
+                </div>
+                <h3>{post.data.title}</h3>
+                <p class="post-description">{post.data.description}</p>
+                <span class="link-text">Weiterlesen &rarr;</span>
+              </div>
+            </a>
+          ))}
+        </div>
       </section>
     )
   }
@@ -346,6 +349,12 @@ const showLatestPost = latestPost && latestPost.data.pubDate >= fourWeeksAgo;
     display: flex;
     align-items: center;
     gap: 0.25rem;
+  }
+
+  .posts-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
   @media (max-width: 768px) {

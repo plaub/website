@@ -11,6 +11,7 @@ const blogCollection = defineCollection({
 		author: z.string().default('Pierre'),
 		image: z.string().optional(),
 		excerpt: z.string().optional(),
+		isFeatured: z.boolean().optional(),
 	}),
 });
 
